@@ -1,12 +1,20 @@
 package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 
-public class ContactHelper extends HelperBase{
+public class ContactHelper extends HelperBase {
 
   public ContactHelper(FirefoxDriver wd) {
+    super(wd);
+  }
+
+  public ContactHelper(WebDriver wd) {
     super(wd);
   }
 
@@ -14,14 +22,20 @@ public class ContactHelper extends HelperBase{
     click(By.xpath("//div[@id='content']/form/input[21]"));
   }
 
-  public void fillContactForm(ContactData usersInfo) {
-    wd.findElement(By.name("firstname")).sendKeys(usersInfo.getName());
-    wd.findElement(By.name("lastname")).sendKeys(usersInfo.getLastName());
-    wd.findElement(By.name("company")).sendKeys(usersInfo.getCompany());
-    wd.findElement(By.name("address")).sendKeys(usersInfo.getText());
-    wd.findElement(By.name("home")).sendKeys(usersInfo.getHomePhone());
-    wd.findElement(By.name("mobile")).sendKeys(usersInfo.getMobile());
-    wd.findElement(By.name("email")).sendKeys(usersInfo.getEmail());
+  public void fillContactForm(ContactData usersInfo, boolean creation) {
+    type(By.name("firstname"), usersInfo.getName());
+    type(By.name("lastname"), usersInfo.getLastName());
+    type(By.name("company"), usersInfo.getCompany());
+    type(By.name("address"), usersInfo.getText());
+    type(By.name("home"), usersInfo.getHomePhone());
+    type(By.name("mobile"), usersInfo.getMobile());
+    type(By.name("email"), usersInfo.getEmail());
+
+    if (creation) {
+      new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(usersInfo.getGroup());
+    } else {
+      Assert.assertFalse(isElementPresent(By.name("new_group")));
+    }
   }
 
   public void initContactCreation() {
