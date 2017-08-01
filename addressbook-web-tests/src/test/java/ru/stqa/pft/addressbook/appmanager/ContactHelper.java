@@ -25,11 +25,6 @@ public class ContactHelper extends HelperBase {
   public void fillContactForm(ContactData usersInfo, boolean creation) {
     type(By.name("firstname"), usersInfo.getName());
     type(By.name("lastname"), usersInfo.getLastName());
-    type(By.name("company"), usersInfo.getCompany());
-    type(By.name("address"), usersInfo.getText());
-    type(By.name("home"), usersInfo.getHomePhone());
-    type(By.name("mobile"), usersInfo.getMobile());
-    type(By.name("email"), usersInfo.getEmail());
 
     if (creation) {
       new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(usersInfo.getGroup());
